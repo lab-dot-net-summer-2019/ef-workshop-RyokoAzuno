@@ -35,7 +35,7 @@ namespace WebApp.Controllers
 
             //TODO
             //Get single Samurai, including quotes and SecretIdentity with id = id (query param)
-
+            var samurai = await _context.Samurais.Include(s => s.Quotes).Include(s => s.SecretIdentity).Include(s => s.Katanas).FirstOrDefaultAsync(s => s.Id == id);
             if (samurai == null)
             {
                 return NotFound();
@@ -60,6 +60,9 @@ namespace WebApp.Controllers
             {
                 //TODO
                 //Add samurai
+                await _context.Samurais.AddAsync(samurai);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(samurai);
@@ -75,10 +78,13 @@ namespace WebApp.Controllers
 
             //TODO
             //Get single Samurai with quotes and SecretIdentity with id = id (query param)
-
-            if (samurai == null) {
+            // Include(s => s.Quotes).Include(s => s.SecretIdentity) are very important!!!!
+            var samurai = await _context.Samurais.Include(s => s.Quotes).Include(s => s.SecretIdentity).Include(s => s.Katanas).FirstOrDefaultAsync(s => s.Id == id);
+            if (samurai == null)
+            {
                 return NotFound();
             }
+
             return View(samurai);
         }
 
@@ -97,7 +103,12 @@ namespace WebApp.Controllers
                 try
                 {
                     //TODO
-                    //Update samurai 
+                    //Update samurai
+                    //var samuraiToUpdate = await _context.Samurais.FirstOrDefaultAsync(s => s.Id == id);
+                    //_context.Entry(samurai).State = EntityState.Modified;
+                    _context.Update(samurai);
+                    
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -112,6 +123,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(samurai);
         }
 
@@ -125,7 +137,7 @@ namespace WebApp.Controllers
 
             //TODO
             //Get single Samurai with id = id (query param)
-
+            var samurai = await _context.Samurais.FirstOrDefaultAsync(s => s.Id == id);
             if (samurai == null) {
                 return NotFound();
             }
@@ -141,6 +153,15 @@ namespace WebApp.Controllers
             //TODO
             //Get single Samurai with id = id (query param)
             //and remove
+            var samurai = await _context.Samurais.FirstOrDefaultAsync(s => s.Id == id);
+            if (samurai == null)
+            {
+                return NotFound();
+            }
+
+            _context.Samurais.Remove(samurai);
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

@@ -49,9 +49,24 @@
         </tr>
     }
 </table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.Katanas)
+    {
+        <tr>
+            <td>@item.Name </td>
+            <td> @Html.ActionLink("Edit", "Edit", "Katana", new { id = item.Id, samuraiId = item.SamuraiId }, null)</td>
+        </tr>
+    }
+</table>
 <div>
 
-    @Html.ActionLink("New Quote", "Create", "Quotes", new { samuraiId = Model.Id }, null)  |
+    @Html.ActionLink("New Katana", "Create", "Katana", new { samuraiId = Model.Id }, null)  |
     <a asp-action="Index">Back to Samurais List</a>
 </div>
 
